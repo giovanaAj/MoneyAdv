@@ -3,11 +3,14 @@ import tkinter as tk
 from tkinter import simpledialog
 
 def mostrar_cotacao():
-    cod_cotacao = simpledialog.askstring("Cotação", "Digite o nome da moeda:")
+    cod_cotacao = simpledialog.askstring("Cotação", "Digite o nome da moeda (ex: USD, EUR, GBP):")
     if cod_cotacao:
         cotacao = pegarcotacoes(cod_cotacao)
-        texto = f"A cotação do {cod_cotacao.upper()} é R$ {cotacao}"
-        label_cotacao.config(text=texto, fg="#2e7d32")
+        if cotacao:
+            texto = f"A cotação do {cod_cotacao.upper()} é R$ {cotacao}"
+            label_cotacao.config(text=texto, fg="#2e7d32")
+        else:
+            label_cotacao.config(text=f"Cotação para '{cod_cotacao.upper()}' não encontrada.", fg="#cb2929")
     else:
         label_cotacao.config(text="Nenhuma moeda informada.", fg="#cb2929")
 
@@ -25,7 +28,16 @@ titulo.pack(pady=(20, 10))
 label_cotacao = tk.Label(frame, text="", font=("Arial", 12), bg="#f5f5f5")
 label_cotacao.pack(pady=10)
 
-btn_cotacao = tk.Button(frame, text="Buscar Cotação", font=("Arial", 12), bg="#1976d2", fg="white", command=mostrar_cotacao, relief="raised", bd=2)
+btn_cotacao = tk.Button(
+    frame,
+    text="Buscar Cotação",
+    font=("Arial", 12),
+    bg="#1976d2",
+    fg="white",
+    command=mostrar_cotacao,
+    relief="raised",
+    bd=2
+)
 btn_cotacao.pack(pady=15)
 
 root.mainloop()

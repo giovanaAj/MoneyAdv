@@ -2,14 +2,23 @@ import requests
 
 def pegarcotacoes(cod_moeda):
     try:
+        cod_moeda = cod_moeda.upper()
         requisicao = requests.get(f"https://economia.awesomeapi.com.br/json/last/{cod_moeda}-BRL")
-        # return requisicao.json()
+        requisicao.raise_for_status()
         requisicao_dic = requisicao.json()
-        # return requisicao_dic['GBPBRL']['bid']
-        cotacao = requisicao_dic[f'{cod_moeda}BRL']['bid']
-        return cotacao
-    except:
-        print('Código da moeda inválido!')
+        moeda_key = f"{cod_moeda}BRL"
+
+        if moeda_key in requisicao_dic:
+            cotacao = requisicao_dic[moeda_key]["bid"]
+            return cotacao
+        else:
+            print(f"Cotação não encontrada para {moeda_key}")
+            return None
+
+    except Exception as e:
+        print(f"Erro ao buscar cotação: {e}")
         return None
 
-print(pegarcotacoes('USD'))
+# Teste simples se quiser rodar só este arquivo
+if __name__ == "__main__":
+    print(pegarcotacoes('USD'))  # Exemplo de uso
